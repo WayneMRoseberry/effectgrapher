@@ -1,0 +1,99 @@
+<div class="breadcrumbs"><a href="/?projectId=<%= project.id %>"><%= project.name %></a> / <strong><%= charter.name %></strong></div>
+
+<h2><%= charter.name %></h2>
+
+<section class="card">
+  <h3>Charter Details</h3>
+  <form method="post" action="/charters/<%= charter.id %>/update" class="stack">
+    <label>Name</label>
+    <input type="text" name="name" value="<%- charter.name %>" maxlength="200" required />
+
+    <label>Description (Markdown)</label>
+    <textarea name="description" rows="6"><%- charter.description || '' %></textarea>
+
+    <button class="btn" type="submit">Save Charter</button>
+  </form>
+
+  <% if (renderedDescription) { %>
+    <div class="markdown">
+      <h4>Rendered Description</h4>
+      <div class="md-content"><%- renderedDescription %></div>
+    </div>
+  <% } %>
+</section>
+
+<section class="card">
+  <h3>Documentation Links</h3>
+  <form method="post" action="/charters/<%= charter.id %>/docs/add" class="inline-form">
+    <input type="url" name="url" placeholder="https://example.com/doc" required />
+    <button class="btn" type="submit">Add Link</button>
+  </form>
+  <ul class="list">
+    <% if (docs.length === 0) { %>
+      <li class="muted">No documentation links</li>
+    <% } %>
+    <% docs.forEach(d => { %>
+      <li>
+        <a href="<%- d.url %>" target="_blank" rel="noopener noreferrer"><%- d.url %></a>
+        <form method="post" action="/charter-docs/<%= d.id %>/delete" class="inline-form">
+          <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+</section>
+
+<section class="card">
+  <div class="section-header">
+    <h3>Sessions</h3>
+    <details class="menu">
+      <summary class="btn">Session Commands</summary>
+      <div class="menu-items">
+        <form method="post" action="/charters/<%= charter.id %>/sessions/add" class="stack">
+          <input type="text" name="name" placeholder="New session title" maxlength="200" required />
+          <input type="text" name="person" placeholder="Tester name (optional)" />
+          <label>Date/Time</label>
+          <input type="datetime-local" name="date" />
+          <button class="btn" type="submit">Add Session</button>
+        </form>
+      </div>
+    </details>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Session</th>
+        <th>Date</th>
+        <th>Person</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (sessions.length === 0) { %>
+        <tr><td colspan="4" class="muted">No sessions yet</td></tr>
+      <% } %>
+      <% sessions.forEach(s => { %>
+        <tr>
+          <td><a href="/sessions/<%= s.id %>"><%= s.name %></a></td>
+          <td><%= new Date(s.date).toLocaleString() %></td>
+          <td><%= s.person || '-' %></td>
+          <td>
+            <details class="menu">
+              <summary class="btn btn-sm">Actions</summary>
+              <div class="menu-items">
+                <form method="post" action="/sessions/<%= s.id %>/rename">
+                  <input type="text" name="name" value="<%- s.name %>" maxlength="200" required />
+                  <button class="btn btn-sm" type="submit">Rename</button>
+                </form>
+                <form method="post" action="/sessions/<%= s.id %>/delete" onsubmit="return confirm('Delete this session?')">
+                  <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                </form>
+              </div>
+            </details>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>

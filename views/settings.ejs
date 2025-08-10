@@ -1,0 +1,11 @@
+<h2>Settings</h2>
+<section class="card">
+  <h3>Request Logs</h3>
+  <p>Total log entries: <strong><%= logCount %></strong></p>
+  <div class="actions">
+    <a class="btn" href="/logs/download">Download Logs (JSON)</a>
+    <form method="post" action="/logs/clear" class="inline-form" onsubmit="return confirm('Clear all logs?')">
+      <button class="btn btn-danger" type="submit">Clear Logs</button>
+    </form>
+  </div>
+</section>

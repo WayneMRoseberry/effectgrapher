@@ -1,0 +1,74 @@
+<div class="breadcrumbs"><a href="/?projectId=<%= project.id %>"><%= project.name %></a> / <a href="/charters/<%= charter.id %>"><%= charter.name %></a> / <strong><%= session.name %></strong></div>
+
+<h2><%= session.name %></h2>
+
+<section class="card">
+  <h3>Session Details</h3>
+  <form method="post" action="/sessions/<%= session.id %>/update" class="stack">
+    <label>Session Title</label>
+    <input type="text" name="name" value="<%- session.name %>" maxlength="200" required />
+
+    <label>Session Date</label>
+    <input type="datetime-local" name="date" value="<%= new Date(session.date).toISOString().slice(0,16) %>" />
+
+    <label>Session Length (minutes)</label>
+    <input type="number" name="length_minutes" min="1" step="1" value="<%= session.length_minutes || '' %>" />
+
+    <label>Person</label>
+    <input type="text" name="person" value="<%- session.person || '' %>" />
+
+    <label>Session Notes (Markdown)</label>
+    <textarea name="notes" rows="8"><%- session.notes || '' %></textarea>
+
+    <button class="btn" type="submit">Save Session</button>
+  </form>
+
+  <% if (renderedNotes) { %>
+    <div class="markdown">
+      <h4>Rendered Notes</h4>
+      <div class="md-content"><%- renderedNotes %></div>
+    </div>
+  <% } %>
+</section>
+
+<section class="card">
+  <h3>Issues (Jira Links)</h3>
+  <form method="post" action="/sessions/<%= session.id %>/issues/add" class="inline-form">
+    <input type="url" name="url" placeholder="https://jira.example.com/browse/KEY-123" required />
+    <button class="btn" type="submit">Add Issue</button>
+  </form>
+  <ul class="list">
+    <% if (issues.length === 0) { %>
+      <li class="muted">No issues logged</li>
+    <% } %>
+    <% issues.forEach(i => { %>
+      <li>
+        <a href="<%- i.url %>" target="_blank" rel="noopener noreferrer"><%- i.url %></a>
+        <form method="post" action="/session-issues/<%= i.id %>/delete" class="inline-form">
+          <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+</section>
+
+<section class="card">
+  <h3>Related Documents</h3>
+  <form method="post" action="/sessions/<%= session.id %>/docs/add" class="inline-form">
+    <input type="url" name="url" placeholder="https://example.com/doc" required />
+    <button class="btn" type="submit">Add Document</button>
+  </form>
+  <ul class="list">
+    <% if (docs.length === 0) { %>
+      <li class="muted">No related documents</li>
+    <% } %>
+    <% docs.forEach(d => { %>
+      <li>
+        <a href="<%- d.url %>" target="_blank" rel="noopener noreferrer"><%- d.url %></a>
+        <form method="post" action="/session-docs/<%= d.id %>/delete" class="inline-form">
+          <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+</section>
