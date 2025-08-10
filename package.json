@@ -1,0 +1,22 @@
+{
+  "name": "session-testing-dashboard",
+  "version": "1.0.0",
+  "description": "Session-based testing management dashboard with request logging",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "NODE_ENV=development nodemon server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.6.0",
+    "dayjs": "^1.11.13",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "marked": "^12.0.2",
+    "on-finished": "^2.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
