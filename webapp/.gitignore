@@ -1,0 +1,11 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
+# build artifacts
+/dist
+/build
+.cache
+.vscode/
+.idea/
